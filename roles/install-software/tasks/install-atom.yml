@@ -1,0 +1,20 @@
+- name: Check if RStudio is installed
+  command: dpkg-query -l atom
+  register: check
+
+- name: Download Atom
+  get_url: 
+    url="https://github.com/atom/atom/releases/download/v1.23.3/atom-amd64.deb"
+    dest="/tmp/atom-amd64.deb"
+  when: check.rc == 1
+
+- name: Install Atom
+  apt: deb="/tmp/atom-amd64.deb"
+  when: check.rc == 1
+#  sudo: true
+
+- name: remove Atom deb
+  file:
+    path: /tmp/atom-amd64.deb
+    state: absent
+  when: check.rc == 1

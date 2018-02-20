@@ -1,0 +1,12 @@
+- name: Add TimeShift PPA
+  command: >
+    apt-add-repository -y ppa:teejee2008/ppa
+    creates=/etc/apt/sources.list.d/teejee2008-ppa-xenial.list
+  register: timeshift_ppa_status
+#  sudo: yes
+
+- name: install TimeShift
+  apt:
+    name: timeshift
+    state: latest
+#  sudo: yes

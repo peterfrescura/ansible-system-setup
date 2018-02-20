@@ -4,6 +4,7 @@
 # different sudo passwords (and most have different passwords, since
 # they are personal workstations).
 
-- hosts: my_computers
+- hosts: work_computers
+  become: true
   roles:
     - install-software

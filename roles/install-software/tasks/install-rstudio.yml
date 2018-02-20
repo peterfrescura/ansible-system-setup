@@ -1,0 +1,39 @@
+- name: Check if RStudio is installed
+  command: dpkg-query -l rstudio
+  register: check
+
+- name: Add an apt key by id from a keyserver
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: E298A3A825C0D65DFD57CBB651716619E084DAB9
+  when: check.rc == 1
+
+- name: add RStudio APT repository
+  apt_repository: repo='deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+  when: check.rc == 1
+#  sudo: yes
+
+- name: Update the repository cache and update package "r-base" to latest version
+  apt:
+    name: r-base
+    state: latest
+    update_cache: yes
+  when: check.rc == 1
+
+- name: Download RStudio
+  get_url: 
+    url="https://download1.rstudio.org/rstudio-xenial-1.1.419-amd64.deb"
+    dest="/tmp/rstudio-xenial-1.1.419-amd64.deb"
+  when: check.rc == 1
+
+- name: Install RStudio
+  apt: deb="/tmp/rstudio-xenial-1.1.419-amd64.deb"
+  when: check.rc == 1
+#  sudo: true
+
+- name: remove RStudio deb
+  file:
+    path: /tmp/rstudio-xenial-1.1.419-amd64.deb
+    state: absent
+  when: check.rc == 1
+

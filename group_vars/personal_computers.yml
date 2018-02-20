@@ -1,9 +1,0 @@
-config_variant: personal
-this_repo_remote: "git@github.com:janek-warchol/ansible-system-setup.git"
-git_config_email: jan.warchol@gmail.com
-
-# user directories (relative to $HOME)
-xdg_documents_dir: janek
-xdg_music_dir: media/muzyka
-xdg_pictures_dir: media/obrazy
-xdg_videos_dir: media/filmy
