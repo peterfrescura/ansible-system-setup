@@ -1,57 +1,6 @@
-Automating my own computer configuration
-----------------------------------------
-
-I have scripted most of my system configuration using [Ansible](http://docs.ansible.com/)
-(a powerful, but surprisingly easy to learn tool for automation,
-remote execution and configuration management).  This allows me
-to setup new workstations easily, and to keep settings of all my accounts in sync.
-
-
-
-Is it worth it?
----------------
-
-It depends.  If you only use one machine, it's nice to have an authoritative
-source of information on what you install and configure on a new system,
-but this only pays off if you reinstall often (say, every couple months?).
-
-If you have two machines - or two user accounts, for work and personal stuff,
-as I do - synchronizing configuration becomes an issue and it may be worth
-the effort to automate it.
-
-If you have more than two machines (or accounts)... you know the answer already
-:-)
-
-
-
-Interesting features
---------------------
-
-- different [configuration variants](roles/user-config) for personal and work user,
-- automated installation of some programs that are not readily available from
-  apt repositories (e.g.
-  [Vagrant](roles/install-software/tasks/install-vagrant.yml) which has to be
-  downloaded from its website,
-  [Ansible itself](roles/install-software/tasks/install-ansible.yml) which I
-  install from a PPA and add a couple of plugins),
-- tasks that can manage desktop environment settings
-  [without access to X server](roles/user-config/tasks/gui-config.yml#L65),
-- [custom keyboard configuration](roles/keyboard) with variations for each
-  machine,
-- (planned) integration with [`pass`](http://www.passwordstore.org/) password
-  manager
-
-
-
-Requirements
-------------
-
-Debian-based Linux.  I use Linux Mint, but it should also work without
-problems on Ubuntu (please open an issue if it doesn't!).
-Adapting this to work on OSX as well would require some work, but if anyone
-would be interested I'm open to pull requests.
-
-
+Disclaimer: Use this at your own risk, I forked this and made changes that I
+needed to get this working for my specific case: get up and running as quickly
+as pssible after a fresh mint (18.2) install.
 
 Usage
 -----
@@ -68,11 +17,13 @@ There are two kinds of machines:
 
 ### Setting up a new master
 
-To bootstrap a completely new machine, run:
+To bootstrap a completely new machine, run (steps I use):
 
     sudo apt-get --yes install git
-    cd ~/.config
-    git clone https://github.com/janek-warchol/ansible-system-setup
+    # if the directory exists this mkdir command should be harmless?
+    mkdir ~/.config
+    cd ~/.config/
+    git clone https://github.com/puzzledvacuum/ansible-system-setup
     ./ansible-system-setup/bootstrap.sh
 
 [`bootstrap.sh`](bootstrap.sh) ensures that the machine can ssh into itself and
@@ -93,13 +44,17 @@ playbooks.
 
 Run Ansible playbooks like this (you can omit sudo prompt for some of them):
 
-    ansible-playbook -i inventory install-software.yml --ask-sudo-pass
+    # example to execute a single role
+    ansible-playbook -i inventory ansible-system-setup/roles/install-software/tasks/install-timeshift.yml --ask-sudo-pass
+    # example to execute multiple roles (playbook)
+    ansible-playbook -i inventory ansible-system-setup/install-software.yml --ask-sudo-pass
 
 Note that some roles require packages that are installed by `install-software`
 role, so you should run it first.  In particular, most of the roles require git.
 I could have added git installation task to the roles that need it, but doing
 so would require me to type my sudo password every time I wanted to run them -
-and I'm too lazy for that.
+and I'm too lazy for that. I have added checks so that roles only add keys
+etc. if packages arent installed, this must be done more elagantly.
 
 
 
@@ -118,4 +73,3 @@ License
 -------
 
 MIT license.
-
