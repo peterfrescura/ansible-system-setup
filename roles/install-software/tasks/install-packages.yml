@@ -34,6 +34,9 @@
     - nautilus-dropbox # for dropbox
     - libxml2-dev # r from here below
     - r-base-dev
+    - libgdal-dev # gdal for sf R
+    - libproj-dev # gdal for sf R
+    - libudunits2-dev # sf for R
 #  sudo: yes
 
 # TODO
