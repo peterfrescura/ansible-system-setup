@@ -4,6 +4,11 @@
     hosts: default
   
     tasks:
+      - name: Check terraform
+        stat:
+          path: /usr/local/bin/terraform
+        register: terraform
+
       - name: Remove docker if installed from CentOS repo
         yum:
           name:
@@ -73,3 +78,8 @@
           groups: docker
           append: yes
         become: yes
+      
+      - block:
+          - name: Install terraform
+            script: files/install.sh
+        when: terraform.stat.exists != true
