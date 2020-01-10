@@ -19,7 +19,10 @@ fi
 
 echo -e "${BOLD}Installing Ansible and OpenSSH...${NORMAL}\n"
 sleep 2
-# Ansible from official repos is ancient - use PPA
-sudo apt-add-repository --yes ppa:ansible/ansible
-sudo apt-get update
-sudo apt-get install --yes ansible openssh-server
+# # Ansible from official repos is ancient - use PPA
+# sudo apt-add-repository --yes ppa:ansible/ansible
+# sudo apt-get update
+# sudo apt-get install --yes ansible openssh-server
+sudo yum install -y epel-release
+sudo yum update -y
+sudo yum install -y ansible
