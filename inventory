@@ -3,12 +3,12 @@
 # I need to manage two different user accounts on my T430s, and it seems the
 # easiest solution is to have separate inventory hostnames for them - see
 # http://serverfault.com/q/720042/309478
-work_mint ansible_ssh_host=localhost ansible_ssh_user=peterf
+default ansible_ssh_host=localhost ansible_ssh_user=cloud_user
 
 
 # Now assign hosts to groups.
 
 
 [work_computers]
-work_mint
+default
 

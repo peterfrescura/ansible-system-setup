@@ -2,6 +2,10 @@
 
 set -eu  # abort on errors/undefined variables
 
+if [ -e /etc/redhat-release ] ; then
+  REDHAT_BASED=true
+fi
+
 NORMAL="\e[00m"; BOLD="\e[1;39m"
 
 # make sure it's possible to `ssh localhost` using machine's own ssh key
@@ -23,6 +27,16 @@ sleep 2
 # sudo apt-add-repository --yes ppa:ansible/ansible
 # sudo apt-get update
 # sudo apt-get install --yes ansible openssh-server
-sudo yum install -y epel-release
-sudo yum update -y
-sudo yum install -y ansible
+
+# install packages
+if [ ${REDHAT_BASED} ] ; then
+  yum -y update
+  yum install -y epel-release
+  yum -y update
+  yum install -y ansible unzip wget
+else
+  apt-get update && apt-get install -y software-properties-common
+  apt-add-repository ppa:ansible/ansible -y
+  apt-get update
+  apt-get install -y ansible unzip openssh-server
+fi
