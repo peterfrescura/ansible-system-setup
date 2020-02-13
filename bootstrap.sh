@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # set -eu  # abort on errors/undefined variables
-set -x
+set -E
 
 if [ -e /etc/redhat-release ] ; then
   REDHAT_BASED=true
